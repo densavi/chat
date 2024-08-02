@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+
+  let messageId = 0;
+
   //modal
   const isModal = 0;
 
@@ -38,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // voice message
   let audio;
+
   async function voiceMessage(voiceText) {
     try {
       const response = await fetch("voice.php", {
@@ -62,41 +67,31 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!$(".chat-sound").hasClass("active")) {
         audio.play();
 
-        // sound animate
+        console.log(messageId);
 
         const animation = lottie.loadAnimation({
-          container: document.getElementById("lottie-animation"),
+          container: document.getElementById(`lottie-animation-${messageId}`),
           renderer: "svg",
           loop: true,
           autoplay: true,
           path: "js/sound-waves.json",
         });
 
-        audio.addEventListener("ended", () => {
-          $("#lottie-animation").remove();
-        });
+        setTimeout(function() {
+          $(`.lottie-${messageId}`).remove();
+        },3000)
 
-        // end
       } else {
         audio.muted = true;
-        $("#lottie-animation").remove();
       }
     } catch (error) {
       console.error("Ошибка запроса:", error);
     }
   }
+
   // end
 
-  // sound on/off
-  $(".chat-sound").on("click", function (e) {
-    e.preventDefault();
-    $(this).toggleClass("active");
-    if ($(this).hasClass("active")) {
-      audio.pause();
-      $("#lottie-animation").remove();
-    }
-  });
-  //end
+  // end
 
   //image to base64
   function getBase64(file, callback) {
@@ -140,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = await response.json();
     $(".message-loader").remove();
     botMessage = data.result.text;
-    console.log(data);
     if (data.result && data.result.options) {
       const $chatList = $(".chat-list");
       $.each(data.result.options, function (key, value) {
@@ -148,14 +142,16 @@ document.addEventListener("DOMContentLoaded", () => {
         $chatList.append('<div class="chat-item">' + value + "</div>");
       });
     }
+    messageId++;
     $(".chat__messages").append(`
       <div class="message message-left">
         ${data.result.text}
-        <div id="lottie-animation"></div>
+        <div id="lottie-animation-${messageId}" class="lottie lottie-${messageId}"></div>
       </div>
     `);
     chatToBottom();
     voiceMessage(data.result.text);
+  
     $(".js-message").focus();
   }
   // end
@@ -258,4 +254,24 @@ document.addEventListener("DOMContentLoaded", () => {
     sendMessage(udid, text);
   });
   // end
+
+ 
+
+
+  $('.chat-keyboard').on('click', function(e) {
+    e.preventDefault();
+    $('.chat__btn-group').hide();
+    $('.chat__message').show(); 
+    $('.js-message').focus();
+  });
+
+  $(document).on('focusin focusout', '.js-message', function() {
+    if ($('.js-message').is(':focus')) {
+      $('.chat__btn-group').hide();
+    } else {
+      $('.chat__message').hide();
+      $('.chat__btn-group').show();
+    }
+  });
+
 });
