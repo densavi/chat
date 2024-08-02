@@ -62,14 +62,12 @@
             <div class="chat__content">
 
                 <div class="chat__messages">
-                    <!--
-                    <div class="message message-left">
-                        <div class="message-photo">
-                            <img src="images/avatar.webp" alt="">
-                        </div>
+                    
+                    <!-- <div class="message message-left">
                         Здравствуйте! Что вас беспокоит?
-                    </div>
--->
+                        <div id="lottie-animation"></div>
+                    </div> -->
+
                 </div>
 
             </div>
@@ -385,6 +383,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/remodal@1.1.1/dist/remodal.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.3/lottie.min.js"></script>
 
     <script src="js/app.js"></script>
 

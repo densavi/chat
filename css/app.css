@@ -669,6 +669,7 @@ body {
     width: -moz-max-content;
     width: max-content;
     min-height: 38px;
+    position: relative;
 }
 
 .message:not(:last-child) {
@@ -1130,29 +1131,6 @@ body.hidden {
     overflow: hidden;
 }
 
-.message-left.message-loader {
-    margin: 0;
-}
-
-.message-left {
-    position: relative;
-    margin-left: 70px;
-}
-
-.message-photo {
-    position: absolute;
-    left: -70px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.message-photo img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-} 
-
 .chat__tel {
     margin-left: auto;
     margin-right: 11px;
@@ -1187,6 +1165,13 @@ body.hidden {
 
 .modal-tel .btn-access {
     border-radius: 8px
+}
+
+#lottie-animation {
+    width: 18px;
+    position: absolute;
+    top: 10px;
+    left: calc(100% + 10px);
 }
 
 @media (max-width: 1200px) and (min-width: 900px) {
