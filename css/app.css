@@ -1180,6 +1180,27 @@ body.hidden {
   display: none;
 }
 
+.label-file.desktop {
+  width: 42px;
+  height: 31px;
+  border-radius: 8px;
+  background-color: #ececf1;
+  box-shadow: 0 0 0;
+}
+
+.voice-desktop {
+  width: 31px;
+  height: 31px;
+  border-radius: 8px;
+  background-color: #ececf1;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-right: 8px;
+}
+
 @media (max-width: 1200px) and (min-width: 900px) {
   .app {
     -ms-grid-columns: 60% 40%;
@@ -1456,5 +1477,20 @@ body.hidden {
   }
   .keyboard-open .chat__btn-group {
     display: none;
+  }
+  .label-file.desktop {
+    display: none;
+  }
+  .voice-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .chat__message {
+    display: block !important;
+  }
+  .chat__btn-group {
+    display: none !important;
   }
 }

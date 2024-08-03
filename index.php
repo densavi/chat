@@ -87,6 +87,33 @@
                 <form method="post" class="js-form">
                     <input type="text" class="js-message" placeholder="Send a message" required>
                     <div class="chat__form-bottom">
+                        <label class="label-file desktop" for="file">
+                            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                                <g fill-rule="nonzero" fill="none">
+                                    <path
+                                        d="M8.091.023C6.736-.158 5.428.742 5.227 2.116L4.76 5.29l-2.607.366A2.464 2.464 0 0 0 .056 8.438l.937 6.659a2.464 2.464 0 0 0 2.782 2.097l6.658-.937a2.464 2.464 0 0 0 2.098-2.782l-.157-1.111 1.006.134c1.355.183 2.663-.718 2.865-2.092l.98-6.659c.203-1.382-.807-2.605-2.168-2.788L8.091.023z"
+                                        fill="#353740" />
+                                    <path
+                                        d="M9.101 8.332a1.174 1.174 0 1 1-2.317.378 1.174 1.174 0 0 1 2.317-.378zm3.046 2.421 1.442.194c.569.076 1.04-.304 1.107-.77l.98-6.658c.067-.455-.264-.932-.827-1.008l-6.966-.936c-.569-.076-1.04.304-1.108.769l-.4 2.719 2.437-.343a2.464 2.464 0 0 1 2.782 2.097l.553 3.937v-.001zm-2.102-3.719a.898.898 0 0 0-1.016-.765l-6.658.936a.898.898 0 0 0-.765 1.016l.485 3.443.836-.832a2.464 2.464 0 0 1 3.22-.221l4.758 3.586a.9.9 0 0 0 .076-.504l-.936-6.659zm-.868 7.82L5.206 11.86a.898.898 0 0 0-1.174.081l-1.669 1.66.18 1.278a.898.898 0 0 0 1.014.765l5.62-.79z"
+                                        fill="#ECECF1" />
+                                </g>
+                            </svg>
+
+                            <input class="js-file" type="file" id="file" name="chat-file">
+                        </label>
+
+
+                        <a href="#" class="voice-desktop">
+                            <svg width="10" height="16" viewBox="0 0 10 16" xmlns="http://www.w3.org/2000/svg">
+                                <g fill="#232948" fill-rule="nonzero">
+                                    <path
+                                        d="M4.923 10.83a2.954 2.954 0 0 0 2.954-2.953V2.954a2.954 2.954 0 1 0-5.908 0v4.923a2.954 2.954 0 0 0 2.954 2.954z" />
+                                    <path
+                                        d="M9.846 7.877v-1.97h-.984v1.816c0 1.89-1.263 3.632-3.116 4.009A3.945 3.945 0 0 1 .985 7.877v-1.97H0v1.97A4.932 4.932 0 0 0 3.938 12.7v2.068H1.97v.985h5.908v-.985h-1.97v-2.068a4.932 4.932 0 0 0 3.94-4.824z" />
+                                </g>
+                            </svg>
+                        </a>
+
                         <a href="#modal-tel" class="chat__tel-mobile">
                             <svg width="18" height="27" viewBox="0 0 18 27" xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -114,7 +141,7 @@
 
 
             <div class="chat__btn-group">
-                <label class="label-file" for="file">
+                <label class="label-file mobile" for="file">
                     <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink">
                         <defs>

@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-
   let messageId = 0;
 
   //modal
@@ -77,10 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
           path: "js/sound-waves.json",
         });
 
-        setTimeout(function() {
+        setTimeout(function () {
           $(`.lottie-${messageId}`).remove();
-        },3000)
-
+        }, 3000);
       } else {
         audio.muted = true;
       }
@@ -151,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `);
     chatToBottom();
     voiceMessage(data.result.text);
-  
+
     $(".js-message").focus();
   }
   // end
@@ -255,23 +252,26 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   // end
 
- 
-
-
-  $('.chat-keyboard').on('click', function(e) {
+  $(".chat-keyboard").on("click", function (e) {
     e.preventDefault();
-    $('.chat__btn-group').hide();
-    $('.chat__message').show(); 
-    $('.js-message').focus();
+    $(".chat__btn-group").hide();
+    $(".chat__message").show();
+    $(".js-message").focus();
   });
 
-  $(document).on('focusin focusout', '.js-message', function() {
-    if ($('.js-message').is(':focus')) {
-      $('.chat__btn-group').hide();
-    } else {
-      $('.chat__message').hide();
-      $('.chat__btn-group').show();
+  $(document).on("focusin focusout", ".js-message", function (e) {
+    if (e.type === "focusin") {
+      $(".chat__btn-group").hide();
+    } else if (
+      e.type === "focusout" &&
+      !$(e.relatedTarget).is(".js-send-message")
+    ) {
+      $(".chat__message").hide();
+      $(".chat__btn-group").show();
     }
   });
 
+  $(".js-send-message").on("click", function () {
+    $(".js-message").focus();
+  });
 });
