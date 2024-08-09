@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-
   let messageId = 0;
 
   //modal
@@ -77,10 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
           path: "js/sound-waves.json",
         });
 
-        setTimeout(function() {
+        setTimeout(function () {
           $(`.lottie-${messageId}`).remove();
-        },3000)
-
+        }, 3000);
       } else {
         audio.muted = true;
       }
@@ -151,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `);
     chatToBottom();
     voiceMessage(data.result.text);
-  
+
     $(".js-message").focus();
   }
   // end
@@ -255,23 +252,111 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   // end
 
- 
-
-
-  $('.chat-keyboard').on('click', function(e) {
+  $(".chat-keyboard").on("click", function (e) {
     e.preventDefault();
-    $('.chat__btn-group').hide();
-    $('.chat__message').show(); 
-    $('.js-message').focus();
+    $(".chat__btn-group").hide();
+    $(".chat__message").show();
+    $(".js-message").focus();
   });
 
-  $(document).on('focusin focusout', '.js-message', function() {
-    if ($('.js-message').is(':focus')) {
-      $('.chat__btn-group').hide();
-    } else {
-      $('.chat__message').hide();
-      $('.chat__btn-group').show();
+  $(document).on("focusin focusout", ".js-message", function (e) {
+    if (e.type === "focusin") {
+      $(".chat__btn-group").hide();
+    } else if (
+      e.type === "focusout" &&
+      !$(e.relatedTarget).is(".js-send-message")
+    ) {
+      $(".chat__message").hide();
+      $(".chat__btn-group").show();
     }
   });
+
+  $(".js-send-message").on("click", function () {
+    $(".js-message").focus();
+  });
+
+
+
+
+  if (!navigator.mediaDevices || !window.MediaRecorder) {
+    console.error('MediaRecorder not supported on this browser.');
+  }
+
+  let mediaRecorder;
+  let audioChunks = [];
+
+  const timerElement = document.querySelector('.js-timer');
+
+  let timer;
+  let timeLeft = 180;
+  let milliseconds = 0;
+
+  document.getElementById('startRecording').addEventListener('click', () => {
+    $('.voice-message').addClass('active');
+    $('.voice-message-overlay').addClass('active');
+
+
+    function formatTime(seconds, milliseconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')},${String(milliseconds).padStart(2, '0')}`;
+    }
+
+    function updateTimer() {
+      if (timeLeft <= 0 && milliseconds <= 0) {
+        clearInterval(timer);
+        timerElement.textContent = '00:00,00';
+        return;
+      }
+
+      milliseconds--;
+      if (milliseconds < 0) {
+        milliseconds = 99;
+        timeLeft--;
+      }
+
+      timerElement.textContent = formatTime(timeLeft, milliseconds);
+    }
+
+      if (timer) {
+        clearInterval(timer);
+      }
+      timeLeft = 180; // сброс таймера на 3 минуты
+      milliseconds = 0;
+      timerElement.textContent = formatTime(timeLeft, milliseconds);
+      timer = setInterval(updateTimer, 10); // обновляем каждые 10 миллисекунд
+
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = event => {
+          audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          console.log('Recording finished. Audio URL:', audioUrl);
+        };
+
+        mediaRecorder.start();
+        document.getElementById('startRecording').disabled = true;
+        document.getElementById('stopRecording').disabled = false;
+      })
+      .catch(error => {
+        console.error('Error accessing microphone:', error);
+      });
+  });
+
+  document.getElementById('stopRecording').addEventListener('click', () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      document.getElementById('startRecording').disabled = false;
+      document.getElementById('stopRecording').disabled = true;
+    }
+  });
+
 
 });

@@ -1,0 +1,24 @@
+<svg width="86" height="86" viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter x="-30.6%" y="-27.4%" width="161.3%" height="161.3%" filterUnits="objectBoundingBox" id="vi1bndf53a">
+            <feOffset in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0" in="shadowBlurOuter1" result="shadowMatrixOuter1"/>
+            <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter2"/>
+            <feGaussianBlur stdDeviation="6" in="shadowOffsetOuter2" result="shadowBlurOuter2"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0" in="shadowBlurOuter2" result="shadowMatrixOuter2"/>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"/>
+                <feMergeNode in="shadowMatrixOuter2"/>
+            </feMerge>
+        </filter>
+        <path d="M0 31C0 13.878 13.878 0 31 0s31 13.878 31 31-13.878 31-31 31S0 48.122 0 31" id="zfgi7bojvb"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g fill-rule="nonzero" transform="translate(12 10)">
+            <use fill="#000" filter="url(#vi1bndf53a)" xlink:href="#zfgi7bojvb"/>
+            <use fill="#242A46" xlink:href="#zfgi7bojvb"/>
+        </g>
+        <path d="M55.576 36.15 44.688 25.263a2.382 2.382 0 0 0-3.372 0l-10.89 10.889a2.382 2.382 0 0 0 0 3.371 2.378 2.378 0 0 0 1.685.7c.61 0 1.221-.235 1.686-.7l6.806-6.803v22.6a2.384 2.384 0 1 0 4.77 0V32.69l6.831 6.831c.933.933 2.44.933 3.372 0a2.382 2.382 0 0 0 0-3.371" fill="#FFF"/>
+    </g>
+</svg>
