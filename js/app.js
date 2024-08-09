@@ -276,8 +276,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-
-
   if (!navigator.mediaDevices || !window.MediaRecorder) {
     console.error('MediaRecorder not supported on this browser.');
   }
