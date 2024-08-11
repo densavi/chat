@@ -22,6 +22,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/responsive.css">
 
 </head>
 
@@ -460,11 +461,23 @@
 
 
     <div class="voice-message">
-        <div class="timer js-timer">02:51,33</div>
+        <div class="timer js-timer"><span></span></div>
+
+        <canvas id="waveform"></canvas>
 
         <div class="timer-text">XXXXXXXXXXXXXXXXX</div>
-        <button class="timer-btn">
-            <img src="images/chat-btn.svg" alt="">
+        <button class="timer-btn" id="stopRecording">
+            <svg class="send" width="28" height="34" viewBox="0 0 28 34" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M26.576 12.15 15.688 1.263a2.382 2.382 0 0 0-3.372 0L1.426 12.151a2.382 2.382 0 0 0 0 3.371 2.378 2.378 0 0 0 1.685.7c.61 0 1.221-.235 1.686-.7l6.806-6.803v22.6a2.384 2.384 0 1 0 4.77 0V8.69l6.831 6.831c.933.933 2.44.933 3.372 0a2.382 2.382 0 0 0 0-3.371"
+                    fill="#FFF" fill-rule="evenodd" />
+            </svg>
+            <svg class="animate" width="28" height="31" viewBox="0 0 28 31" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#FFF" fill-rule="nonzero">
+                    <path
+                        d="M12.117 9.643c0 1.012.817 1.829 1.829 1.829a1.826 1.826 0 0 0 1.828-1.829V2.329A1.826 1.826 0 0 0 13.946.5a1.826 1.826 0 0 0-1.829 1.829v7.314zM12.117 29.148c0 1.012.817 1.829 1.829 1.829a1.826 1.826 0 0 0 1.828-1.829v-7.314a1.826 1.826 0 0 0-1.828-1.829 1.826 1.826 0 0 0-1.829 1.829v7.314zM8.667 14.52c-.304 0-.621-.074-.914-.245l-6.34-3.657a1.83 1.83 0 0 1 1.829-3.17l6.34 3.658a1.83 1.83 0 0 1 .67 2.499 1.845 1.845 0 0 1-1.585.914zM24.637 24.028a1.83 1.83 0 0 0 2.5-.67c.499-.878.206-2-.671-2.5l-6.34-3.657a1.83 1.83 0 0 0-1.828 3.17l6.339 3.657zM19.224 14.52a1.83 1.83 0 0 1-1.584-.915 1.833 1.833 0 0 1 .67-2.5l6.34-3.656a1.83 1.83 0 0 1 1.828 3.17l-6.34 3.656c-.292.171-.609.244-.914.244zM.743 23.357a1.83 1.83 0 0 0 2.5.67l6.339-3.656a1.833 1.833 0 0 0 .67-2.5 1.833 1.833 0 0 0-2.499-.67l-6.34 3.657a1.833 1.833 0 0 0-.67 2.5z" />
+                </g>
+            </svg>
         </button>
     </div>
     <div class="voice-message-overlay"></div>

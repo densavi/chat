@@ -65,8 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!$(".chat-sound").hasClass("active")) {
         audio.play();
 
-        console.log(messageId);
-
         const animation = lottie.loadAnimation({
           container: document.getElementById(`lottie-animation-${messageId}`),
           renderer: "svg",
@@ -149,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
     chatToBottom();
     voiceMessage(data.result.text);
 
-    $(".js-message").focus();
   }
   // end
 
@@ -275,35 +272,31 @@ document.addEventListener("DOMContentLoaded", () => {
     $(".js-message").focus();
   });
 
+  function timer() {
+    const timerElement = document.querySelector(".js-timer span");
 
-  if (!navigator.mediaDevices || !window.MediaRecorder) {
-    console.error('MediaRecorder not supported on this browser.');
-  }
+    let timer;
+    let timeLeft = 180;
+    let milliseconds = 0;
 
-  let mediaRecorder;
-  let audioChunks = [];
-
-  const timerElement = document.querySelector('.js-timer');
-
-  let timer;
-  let timeLeft = 180;
-  let milliseconds = 0;
-
-  document.getElementById('startRecording').addEventListener('click', () => {
-    $('.voice-message').addClass('active');
-    $('.voice-message-overlay').addClass('active');
-
+    $(".voice-message").addClass("active");
+    $(".voice-message-overlay").addClass("active");
 
     function formatTime(seconds, milliseconds) {
       const minutes = Math.floor(seconds / 60);
       const secs = seconds % 60;
-      return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')},${String(milliseconds).padStart(2, '0')}`;
+      return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
+        2,
+        "0"
+      )},${String(milliseconds).padStart(2, "0")}`;
     }
 
     function updateTimer() {
       if (timeLeft <= 0 && milliseconds <= 0) {
         clearInterval(timer);
-        timerElement.textContent = '00:00,00';
+        timerElement.textContent = "00:00,00";
+        mediaRecorder.stop();
+        $(".timer-btn").addClass("loading");
         return;
       }
 
@@ -316,45 +309,123 @@ document.addEventListener("DOMContentLoaded", () => {
       timerElement.textContent = formatTime(timeLeft, milliseconds);
     }
 
-      if (timer) {
-        clearInterval(timer);
-      }
-      timeLeft = 180; // сброс таймера на 3 минуты
-      milliseconds = 0;
-      timerElement.textContent = formatTime(timeLeft, milliseconds);
-      timer = setInterval(updateTimer, 10); // обновляем каждые 10 миллисекунд
+    if (timer) {
+      clearInterval(timer);
+    }
+    timeLeft = 180;
+    milliseconds = 0;
+    timerElement.textContent = formatTime(timeLeft, milliseconds);
+    timer = setInterval(updateTimer, 10);
+  }
 
+  let mediaRecorder;
+  let audioChunks = [];
 
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
+  $("#startRecording").click(function () {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        audioChunks = [];
         mediaRecorder = new MediaRecorder(stream);
-
-        mediaRecorder.ondataavailable = event => {
-          audioChunks.push(event.data);
-        };
-
-        mediaRecorder.onstop = () => {
-          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-          const audioUrl = URL.createObjectURL(audioBlob);
-          console.log('Recording finished. Audio URL:', audioUrl);
-        };
-
         mediaRecorder.start();
-        document.getElementById('startRecording').disabled = true;
-        document.getElementById('stopRecording').disabled = false;
+
+        // Настройка анимации волн
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        const canvas = document.getElementById("waveform");
+        const ctx = canvas.getContext("2d");
+
+        function draw() {
+          requestAnimationFrame(draw);
+          analyser.getByteFrequencyData(dataArray);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          const barWidth = (canvas.width / bufferLength) * 1.5;
+          let barHeight;
+          let x = 0;
+
+          for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.fillRect(
+              x,
+              canvas.height - barHeight / 2,
+              barWidth,
+              barHeight / 2
+            );
+            x += barWidth + 1;
+          }
+        }
+
+        draw();
+
+        timer();
+        $(".voice-message").addClass("active");
+        $(".voice-message-overlay").addClass("active");
+
+        mediaRecorder.addEventListener("dataavailable", (event) => {
+          audioChunks.push(event.data);
+        });
+
+        mediaRecorder.addEventListener("stop", () => {
+          const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+          const formData = new FormData();
+          formData.append("audio", audioBlob, "recording.wav");
+          formData.append("udid", udid);
+
+          $.ajax({
+            url: "save-audio.php",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              if (typeof response === "string") {
+                try {
+                  response = JSON.parse(response);
+                  $(".chat__messages").append(`
+                    <div class="message message-right">
+                      ${response.result.text}
+                    </div>
+                  `);
+                  sendMessage(udid, response.result.text);
+                } catch (e) {
+                  console.error("Ошибка парсинга JSON:", e);
+                  return;
+                }
+              }
+              $(".timer-btn").addClass("loading");
+              $(".voice-message").removeClass("active");
+              $(".voice-message-overlay").removeClass("active");
+              $(".chat__btn-group").show();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.error(
+                "Ошибка сохранения аудио: " + textStatus,
+                errorThrown
+              );
+            },
+          });
+        });
       })
-      .catch(error => {
-        console.error('Error accessing microphone:', error);
+      .catch((error) => {
+        console.error("Ошибка доступа к микрофону: " + error.message);
+        $(".voice-message").removeClass("active");
+        $(".voice-message-overlay").removeClass("active");
       });
   });
 
-  document.getElementById('stopRecording').addEventListener('click', () => {
+  $("#stopRecording").click(function () {
     if (mediaRecorder) {
       mediaRecorder.stop();
-      document.getElementById('startRecording').disabled = false;
-      document.getElementById('stopRecording').disabled = true;
+      $(".timer-btn").addClass("loading");
+      clearInterval(timer);
     }
   });
-
-
 });
