@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+  const mobile = 900;
+
   let messageId = 0;
 
   //modal
@@ -325,7 +328,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let mediaRecorder;
   let audioChunks = [];
 
-  $("#startRecording").click(function () {
+  let startRecordBtn = $("#startRecording");
+
+  if ($(window).width() > mobile) {
+    startRecordBtn = $('.voice-desktop');
+  }
+
+  startRecordBtn.click(function (e) {
+    e.preventDefault();
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {

@@ -1307,3 +1307,8 @@ body.hidden {
   width: 87%;
   height: 25px;
 }
+
+
+button {
+  cursor: pointer;
+}
