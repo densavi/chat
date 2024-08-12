@@ -146,7 +146,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `);
     chatToBottom();
     voiceMessage(data.result.text);
-
   }
   // end
 
@@ -316,6 +315,11 @@ document.addEventListener("DOMContentLoaded", () => {
     milliseconds = 0;
     timerElement.textContent = formatTime(timeLeft, milliseconds);
     timer = setInterval(updateTimer, 10);
+
+    document.querySelector(".timer-btn").addEventListener("click", function () {
+      clearInterval(timer);
+      timerElement.textContent = formatTime(timeLeft, milliseconds);
+    });
   }
 
   let mediaRecorder;
@@ -329,7 +333,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.start();
 
-        // Настройка анимации волн
         const audioContext = new (window.AudioContext ||
           window.webkitAudioContext)();
         const analyser = audioContext.createAnalyser();
@@ -341,7 +344,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const canvas = document.getElementById("waveform");
         const ctx = canvas.getContext("2d");
 
+        let isAnimating = true;
+
         function draw() {
+          if (!isAnimating) return; 
           requestAnimationFrame(draw);
           analyser.getByteFrequencyData(dataArray);
           ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -362,6 +368,11 @@ document.addEventListener("DOMContentLoaded", () => {
             x += barWidth + 1;
           }
         }
+
+        $('.timer-btn').on("click", function () {
+          isAnimating = false; 
+          if (isAnimating) draw(); 
+        });
 
         draw();
 
@@ -395,12 +406,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                   `);
                   sendMessage(udid, response.result.text);
+                  $(".timer-btn").removeClass("loading");
+                  clearInterval(timer);
                 } catch (e) {
                   console.error("Ошибка парсинга JSON:", e);
                   return;
                 }
               }
-              $(".timer-btn").addClass("loading");
               $(".voice-message").removeClass("active");
               $(".voice-message-overlay").removeClass("active");
               $(".chat__btn-group").show();

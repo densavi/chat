@@ -14,6 +14,11 @@
     padding-bottom: 23px;
   }
 
+  .app {
+    width: 100%;
+    border: 0;
+  }
+
   .sidebar-right {
     display: none;
   }
